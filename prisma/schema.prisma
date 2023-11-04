@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model register {
+  id         Int          @id @default(autoincrement())
+  name  String       @db.VarChar(50)
+  email      String       @db.VarChar(50) @unique
+  password   String       @db.VarChar(50)
+  createdAt  DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime     @default(now()) @db.Timestamp(0) @updatedAt
+  
+}
+
+
+
+
+model categories {
+  id    Int       @id @default(autoincrement())
+  name  String    @db.VarChar(100) @unique
+  createdAt  DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime    @default(now()) @db.Timestamp(0) @updatedAt
+  
+  service service[]
+}
+
+
+model blog_list  {
+  id            Int        @id @default(autoincrement())
+  title         String     @db.VarChar(100)
+  short_des     String     @db.VarChar(400)
+  img1          String     @db.VarChar(300)
+  keywords      String     @db.VarChar(300)
+  long_des      String     @db.LongText
+  type          String     @db.VarChar(200)
+  createdAt     DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime    @default(now()) @db.Timestamp(0) @updatedAt
+  
+}
+
+model service {
+  id            Int        @id @default(autoincrement())
+  title         String     @db.VarChar(100)
+  img          String     @db.VarChar(300)
+  keywords      String     @db.VarChar(300)
+  type          String     @db.VarChar(200)
+  catID         Int
+  categories    categories @relation(fields: [catID],references: [id],onDelete: Restrict,onUpdate:Cascade)
+  createdAt     DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime    @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+model team {
+  id            Int        @id @default(autoincrement())
+  name         String     @db.VarChar(100)
+  img          String     @db.VarChar(200)
+  rank      String     @db.VarChar(100)
+  desc          String     @db.VarChar(200)
+  createdAt     DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime    @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+model contact {
+  id            Int        @id @default(autoincrement())
+  name         String     @db.VarChar(100)
+  email          String     @db.VarChar(100)
+  message      String     @db.VarChar(300)
+  createdAt     DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime    @default(now()) @db.Timestamp(0) @updatedAt
+}
+
